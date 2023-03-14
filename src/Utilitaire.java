@@ -1,8 +1,9 @@
 package model.util;
 import model.*;
-
+import java.util.*;
+import  etu1906.framework.*;
 public class Utilitaire {
-    static String base = "http://localhost:8081/framework2/";
+    static String base = "http://localhost:8081/framework3/";
 
     public static String getUrl(String url ){
         int index =  url.indexOf(base); // trouver l'index de la chaîne "haha"
@@ -15,6 +16,25 @@ public class Utilitaire {
         } else {
             return "none";
         }
+    }
+
+    public static  HashMap<String , Mapping> getAllMethodInClass( Class<?> clazz , HashMap<String , Mapping> MappingUrls ){
+        java.lang.reflect.Method[] methods = clazz.getDeclaredMethods();
+        for (java.lang.reflect.Method method : methods) {
+            Urls annotation = method.getAnnotation(Urls.class);
+            if (annotation != null) {
+                Mapping mapping = new Mapping( clazz.getName() , method.getName()  );
+                MappingUrls.put( annotation.url() , mapping );
+            }
+        }
+        return MappingUrls;
+    }
+
+    public static  HashMap<String , Mapping> getAllMethod( Vector<Class<?>> listpackage , HashMap<String , Mapping> MappingUrls  ){
+        for (Class<?> clazz : listpackage) {
+            getAllMethodInClass( clazz , MappingUrls );   
+        }
+        return MappingUrls;
     }
 
     public static String getMethod( Class<?> clazz , String url ) {
