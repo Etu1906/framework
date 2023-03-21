@@ -28,6 +28,7 @@ public class MyPackage{
             if (resource == null) {
                 throw new ClassNotFoundException("No resource for " + path);
             }
+            System.out.println( " ressource : "+resource.getFile() );
             directory = new File(resource.getFile());
         } catch (NullPointerException x) {
             x.printStackTrace();
@@ -41,12 +42,20 @@ public class MyPackage{
                 File file = new File(directory.getAbsolutePath() + File.separator + files[i]);
                 System.out.println( " path : "+file.getAbsolutePath() );
                 if (file.isDirectory()) {
-                    getClasses(classes, packageName + "." + file.getName());
+                     if( packageName.isEmpty() == true )
+                        getClasses(classes, file.getName());
+                     else 
+                        getClasses(classes, packageName + "." + file.getName());
                 } else {
                     if (files[i].endsWith(".class")) {
                         // removes the .class extension
+                        if( packageName.isEmpty() == true ){
+                            System.out.println( " file : "+files[i].substring(0, files[i].length() - 6)) ;
+                            classes.add(Class.forName( files[i].substring(0, files[i].length() - 6)));
+                        }else{
                         System.out.println( "files : "+files[i] );
                         classes.add(Class.forName(packageName + '.' + files[i].substring(0, files[i].length() - 6)));
+                        }
                     }
                 }
             }
