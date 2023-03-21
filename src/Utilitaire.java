@@ -3,9 +3,8 @@ import model.*;
 import java.util.*;
 import  etu1906.framework.*;
 public class Utilitaire {
-    static String base = "http://localhost:8081/framework3/";
 
-    public static String getUrl(String url ){
+    public static String getUrl(String url , String base ){
         int index =  url.indexOf(base); // trouver l'index de la chaîne "haha"
         System.out.println( base );
         System.out.println( url );

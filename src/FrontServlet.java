@@ -14,13 +14,15 @@ import model.util.*;
 import etu1906.framework.Mapping;
 import model.util.Utilitaire;
 public class FrontServlet extends HttpServlet{
-    Vector<Class<?>> listpackage;
     HashMap<String , Mapping> MappingUrls = new HashMap<String  , Mapping>();
+    Vector<Class<?>> listpackage;
+    String base ;
 
     public void init() throws ServletException {
         try{
-            MyPackage p=new MyPackage("model");
-            this.listpackage =  p.getClasses( null  , "model" );
+            base = this.getInitParameter("base_url");
+            MyPackage p=new MyPackage("");
+            listpackage =  p.getClasses( null  , "" );
             this.MappingUrls = Utilitaire.getAllMethod(listpackage, MappingUrls ) ; 
         }catch( Exception e ){
             e.printStackTrace();
@@ -52,11 +54,14 @@ public class FrontServlet extends HttpServlet{
             out.println(url);
 
 
-            String value = Utilitaire.getUrl( url );
+            String value = Utilitaire.getUrl( url , base );
             System.out.println( MappingUrls.get(value) );
-            if( MappingUrls.get(value) != null){
-                out.print( MappingUrls.get(value).getMethod() );
-            } 
+
+
+            for( Map.Entry<String , Mapping> entry : MappingUrls.entrySet() ){
+                out.println( "url :  "+entry.getKey()+" class : "+(entry.getValue()).getClassName() +" method : "+(entry.getValue()).getMethod() );
+            }
+
         }catch( Exception e ){
             e.printStackTrace();
         } 
